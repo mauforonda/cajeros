@@ -21,9 +21,11 @@ jobs:
       - name: Update
         run: |
          python movers.py
-      - name: Commit
-        run: |
-          git config --global user.email "cajeros-bot@example.com"
-          git config --global user.name "cajeros-bot"
-          git add -A
-          git diff --quiet && git diff --staged --quiet || (git commit -m "[ci] update"; git push -q "https://$GH_TOKEN@github.com/mauforonda/cajeros.git" main)
+      - name: Publish
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./data
+          force_orphan: true
+          user_name: cajeros-bot
+          user_email: cajeros-bot@example.com
