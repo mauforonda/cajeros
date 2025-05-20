@@ -20,7 +20,7 @@ jobs:
           pip install -r requirements.txt
       - name: Update
         run: |
-         python update.py
+         python movers.py
       - name: Commit
         run: |
           git config --global user.email "cajeros-bot@example.com"
