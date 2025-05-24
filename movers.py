@@ -6,6 +6,8 @@ import kagglehub
 from kagglehub import KaggleDatasetAdapter
 import json
 import datetime as dt
+from pyarrow import parquet as pq
+from pyarrow import Table
 
 DAYS = 30
 
@@ -35,7 +37,18 @@ usdt.groupby("advertiser_userno").apply(
 
 # Save all offers
 
-usdt[["advertiser_userno", "timestamp", "adv_price"]].to_parquet("data/ads.parquet")
+table = Table.from_pandas(
+    usdt[["advertiser_userno", "timestamp", "adv_price", "adv_tradablequantity"]]
+)
+pq.write_table(
+    table,
+    "data/ads.parquet",
+    compression="zstd",
+    compression_level=3,
+    use_dictionary=True,
+    data_page_version="2.0",
+    write_statistics=True,
+)
 
 # Save additional information for graphics
 
